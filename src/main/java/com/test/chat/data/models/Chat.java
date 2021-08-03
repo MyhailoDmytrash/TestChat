@@ -9,14 +9,20 @@ import java.util.List;
 @Entity
 public class Chat extends BaseEntity
 {
-    @OneToMany(mappedBy = "chat", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "chat", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     protected List<Message> messages;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
-    protected User client;
+    @OneToOne(mappedBy = "chat")
+    protected Client client;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_id")
-    protected User admin;
+    protected Admin admin;
+
+    public Chat() {}
+
+    public Chat(Client client)
+    {
+        this.client = client;
+    }
 }

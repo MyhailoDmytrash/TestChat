@@ -1,8 +1,7 @@
 package com.test.chat.security.services;
 
-import ch.qos.logback.core.net.server.Client;
+import com.test.chat.data.models.Admin;
 import com.test.chat.data.models.Authority;
-import com.test.chat.data.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,13 +19,13 @@ public class JavaWebTokenAuthenticationService
 {
     protected static final String SECRET = "fS#$@136F";
 
-    public String createJWT(@NonNull final User user)
+    public String createJWT(@NonNull final Admin admin)
     {
         return Jwts.builder().signWith(SignatureAlgorithm.HS512, SECRET)
                 .setClaims(Map.of(
-                        "email", user.getEmail(),
-                        "password", user.getPassword(),
-                        "auth", user.getAuthority().toString()
+                        "email", admin.getEmail(),
+                        "password", admin.getPassword(),
+                        "auth", admin.getAuthority().toString()
                 ))
                 .compact();
     }

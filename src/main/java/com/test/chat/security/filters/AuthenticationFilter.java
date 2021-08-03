@@ -26,5 +26,7 @@ public class AuthenticationFilter implements Filter
                 .flatMap(javaWebTokenAuthenticationService::parseJWT)
                 .ifPresentOrElse(authority -> SecurityContextHolder.getContext().setAuthentication(authority),
                         () -> SecurityContextHolder.getContext().setAuthentication(null));
+
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 }

@@ -1,15 +1,15 @@
 package com.test.chat.data.repositories;
 
-import com.test.chat.data.models.User;
+import com.test.chat.data.models.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>
+public interface AdminRepository extends JpaRepository<Admin, Long>
 {
-    Optional<User> getUserByEmail(String email);
+    Optional<Admin> getUserByEmail(String email);
 
     boolean existsUserByEmail(String email);
 }
