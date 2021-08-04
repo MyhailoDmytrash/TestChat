@@ -61,12 +61,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList(
                 "content-type",
-                "x-xsrf-token",
-                "authorization",
-                "x-requested-with",
-                "x-authentication-token",
-                "withCredentials",
-                "_csrf",
                 "Access-Control-Allow-Origin",
                 ChatApplication.JWT_NAME
         ));

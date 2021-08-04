@@ -1,6 +1,9 @@
 package com.test.chat.data.models;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.test.chat.data.View;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -10,15 +13,19 @@ import java.util.Date;
 
 @Data
 @Entity
+@ToString(of = {"message", "messageType", "sendDate"})
 public class Message extends BaseEntity
 {
+    @JsonView({View.CurrentChat.class, View.OnlyOneMessage.class})
     @NotBlank
     protected String message;
 
+    @JsonView({View.CurrentChat.class, View.OnlyOneMessage.class})
     protected MessageType messageType;
 
+    @JsonView({View.CurrentChat.class, View.OnlyOneMessage.class})
     @Column(updatable = false)
-    protected Date sendData = new Date();
+    protected Date sendDate = new Date();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_id")

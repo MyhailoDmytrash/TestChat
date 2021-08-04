@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
-import javax.validation.Validator;
 
 // TODO: 03.08.2021 Data validation
 
@@ -17,7 +16,7 @@ import javax.validation.Validator;
 @RequiredArgsConstructor
 public class AuthenticationService
 {
-    protected final Validator validator;
+    //protected final Validator validator;
     protected final AdminService adminService;
     protected final JavaWebTokenAuthenticationService javaWebTokenAuthenticationService;
 

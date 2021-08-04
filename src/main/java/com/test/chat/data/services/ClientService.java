@@ -13,14 +13,20 @@ import java.util.Optional;
 public class ClientService
 {
     protected final ClientRepository clientRepository;
+    protected final ChatService chatService;
 
     public Client getClientByLoginAndUsername(@NotBlank final String login, @NotBlank final String username)
     {
-        Optional<Client> client = clientRepository.getClientByLogin(login);
+        Optional<Client> optionalClient = clientRepository.getClientByLogin(login);
 
-        if (client.isEmpty())
-            return clientRepository.saveAndFlush(new Client(login, username));
+        if (optionalClient.isEmpty())
+        {
+            Client client = clientRepository.saveAndFlush(new Client(login, username));
+            client.setChat(chatService.createChat(client));
+            clientRepository.saveAndFlush(client);
+            return client;
+        }
 
-        return client.get();
+        return optionalClient.get();
     }
 }

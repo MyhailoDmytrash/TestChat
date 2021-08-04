@@ -1,6 +1,7 @@
 package com.test.chat.data.models;
 
-import com.test.chat.controllers.forms.AskForm;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.test.chat.data.View;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,10 +12,12 @@ public class Client extends BaseEntity
 {
     @Column(unique = true)
     protected String login;
+
+    @JsonView(View.OnlyChats.class)
     protected String username;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "chat_id")
     protected Chat chat;
 

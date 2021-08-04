@@ -33,5 +33,10 @@ public class AdminService
                 .filter(user -> passwordEncoder.matches(password, user.getPassword()))
                 .orElseThrow(() -> new AuthenticationException("Wrong email or password"));
     }
+
+    public Admin getUserByEmail(@NonNull final String email) throws AuthenticationException {
+        return adminRepository.getUserByEmail(email)
+                .orElseThrow(() -> new AuthenticationException("User not found"));
+    }
 }
 

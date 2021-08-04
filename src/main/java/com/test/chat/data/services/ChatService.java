@@ -1,32 +1,47 @@
 package com.test.chat.data.services;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.test.chat.data.View;
+import com.test.chat.data.models.Admin;
 import com.test.chat.data.models.Chat;
 import com.test.chat.data.models.Client;
-import com.test.chat.data.repositories.CharRepository;
+import com.test.chat.data.repositories.ChatRepository;
+import com.test.chat.exceptions.MessageManagerException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ChatService
 {
-    protected final CharRepository charRepository;
+    protected final ChatRepository chatRepository;
 
-    public Chat getChatByClient(@NonNull final Client client)
+    public Chat createChat(@NonNull final Client client)
     {
-        Optional<Chat> optionalChat = charRepository.getChatByClientLogin(client.getLogin());
+        return chatRepository.saveAndFlush(new Chat(client));
+    }
 
-        if(optionalChat.isEmpty())
-        {
-            Chat chat = charRepository.saveAndFlush(new Chat(client));
-            client.setChat(chat);
+    public List<Chat> getFreeChats()
+    {
+        return chatRepository.getChatsByAdminIsNull();
+    }
 
-            return chat;
-        }
+    public Chat getChatByUUID(@NonNull final String chatUUID) throws MessageManagerException {
+        return chatRepository.getChatByUuid(chatUUID)
+                .orElseThrow(() -> new MessageManagerException("Chat not found"));
+    }
 
-        return optionalChat.get();
+    public Chat setAdmin(@NonNull final Chat chat, @NonNull final Admin admin)
+    {
+        chat.setAdmin(admin);
+        return chatRepository.saveAndFlush(chat);
+    }
+
+    public List<Chat> getChatByAdminEmail(@NonNull final String email)
+    {
+        return chatRepository.getChatByAdminEmail(email);
     }
 }

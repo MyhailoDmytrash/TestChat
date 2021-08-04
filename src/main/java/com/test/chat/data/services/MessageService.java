@@ -13,8 +13,8 @@ public class MessageService
 {
     protected final MessageRepository messageRepository;
 
-    public void createMessage(@NonNull final Chat chat, @NonNull final String message)
+    public Message sendMessage(@NonNull final Chat chat, @NonNull final String message, @NonNull final Message.MessageType messageType)
     {
-        messageRepository.saveAndFlush(new Message(chat, message, Message.MessageType.ASK));
+        return messageRepository.saveAndFlush(new Message(chat, message, messageType));
     }
 }
