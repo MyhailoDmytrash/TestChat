@@ -1,7 +1,7 @@
 package com.test.chat.security.filters;
 
 import com.test.chat.ChatApplication;
-import com.test.chat.security.services.JavaWebTokenAuthenticationService;
+import com.test.chat.services.impl.JavaWebTokenAuthenticationServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthenticationFilter implements Filter
 {
-    protected final JavaWebTokenAuthenticationService javaWebTokenAuthenticationService;
+    protected final JavaWebTokenAuthenticationServiceImpl javaWebTokenAuthenticationService;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException

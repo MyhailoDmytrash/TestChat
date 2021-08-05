@@ -1,0 +1,18 @@
+package com.test.chat.services;
+
+import com.test.chat.models.entities.Admin;
+import com.test.chat.models.entities.Chat;
+import com.test.chat.models.entities.Client;
+import com.test.chat.exceptions.MessageManagerException;
+import lombok.NonNull;
+
+import java.util.List;
+
+public interface ChatService
+{
+    Chat createChat(@NonNull Client client);
+    List<Chat> getFreeChats();
+    Chat getChatByUUID(@NonNull String chatUUID) throws MessageManagerException;
+    Chat setAdmin(@NonNull Chat chat, @NonNull Admin admin);
+    List<Chat> getChatByAdminEmail(@NonNull String email);
+}
