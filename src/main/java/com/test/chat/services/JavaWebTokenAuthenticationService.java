@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import java.util.Optional;
 
 public interface JavaWebTokenAuthenticationService {
+    public static final String JWT_NAME = "Authentication-Token";
+
     String createJWT(@NonNull Admin admin);
 
     Optional<Authentication> parseJWT(@NonNull String token);

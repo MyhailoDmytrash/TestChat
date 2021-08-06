@@ -11,7 +11,7 @@ public class ChatDTO
 {
     protected List<MessageDTO> messages;
 
-    protected ClientDTO client;
+    protected String clientId;
 
     @NotBlank
     protected String uuid;

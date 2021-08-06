@@ -1,10 +1,13 @@
 package com.test.chat.models.entities;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Client extends BaseEntity
 {
@@ -13,8 +16,7 @@ public class Client extends BaseEntity
 
     protected String username;
 
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_id")
     protected Chat chat;
 

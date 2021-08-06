@@ -1,6 +1,6 @@
 package com.test.chat.security.filters;
 
-import com.test.chat.ChatApplication;
+import com.test.chat.services.JavaWebTokenAuthenticationService;
 import com.test.chat.services.impl.JavaWebTokenAuthenticationServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,7 +22,7 @@ public class AuthenticationFilter implements Filter
     {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
 
-        Optional.ofNullable(httpServletRequest.getHeader(ChatApplication.JWT_NAME))
+        Optional.ofNullable(httpServletRequest.getHeader(JavaWebTokenAuthenticationService.JWT_NAME))
                 .flatMap(javaWebTokenAuthenticationService::parseJWT)
                 .ifPresentOrElse(authority -> SecurityContextHolder.getContext().setAuthentication(authority),
                         () -> SecurityContextHolder.getContext().setAuthentication(null));

@@ -10,18 +10,13 @@ import com.test.chat.models.entities.Admin;
 import com.test.chat.models.entities.Chat;
 import com.test.chat.models.entities.Client;
 import com.test.chat.models.entities.Message;
-import com.test.chat.services.BrokerService;
-import com.test.chat.services.ChatService;
-import com.test.chat.services.ClientService;
-import com.test.chat.services.MessageService;
+import com.test.chat.services.*;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.mapping.Collection;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,12 +27,14 @@ public class BrokerServiceImpl implements BrokerService {
     protected final MessageService messageService;
     protected final AdminServiceImpl adminService;
     protected final ModelMapper modelMapper;
+    protected final SocketIOService socketIOService;
 
     @Override
     public void sendAsk(@NonNull final AskForm askForm)
     {
         Client client = clientService.getClientByLoginAndUsername(askForm.getLogin(), askForm.getUsername());
-        messageService.sendMessage(client.getChat(), askForm.getMessage(), MessageType.ASK);
+        Message message = messageService.sendMessage(client.getChat(), askForm.getMessage(), MessageType.ASK);
+        socketIOService.sendMessageToUser(message);
     }
 
     @Override

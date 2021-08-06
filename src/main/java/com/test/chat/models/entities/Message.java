@@ -3,12 +3,16 @@ package com.test.chat.models.entities;
 //import com.test.chat.enums.MessageType;
 import com.test.chat.enums.MessageType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Message extends BaseEntity
 {
@@ -20,7 +24,7 @@ public class Message extends BaseEntity
     @Column(updatable = false)
     protected Date sendDate = new Date();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "chat_id")
     protected Chat chat;
 

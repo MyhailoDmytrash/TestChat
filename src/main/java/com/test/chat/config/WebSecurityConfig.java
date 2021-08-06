@@ -1,11 +1,9 @@
 package com.test.chat.config;
 
-import com.test.chat.ChatApplication;
 import com.test.chat.security.filters.AuthenticationFilter;
+import com.test.chat.services.JavaWebTokenAuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.jaas.AbstractJaasAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,9 +14,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
 import java.util.Arrays;
 
 @EnableWebSecurity
@@ -62,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         configuration.setAllowedHeaders(Arrays.asList(
                 "content-type",
                 "Access-Control-Allow-Origin",
-                ChatApplication.JWT_NAME
+                JavaWebTokenAuthenticationService.JWT_NAME
         ));
         configuration.setAllowCredentials(true);
 

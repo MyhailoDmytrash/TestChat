@@ -1,21 +1,23 @@
 package com.test.chat.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
-@ToString(of = {"messages"})
 public class Chat extends BaseEntity
 {
     @OneToMany(mappedBy = "chat", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     protected List<Message> messages;
 
     @OneToOne(mappedBy = "chat", fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id")
     protected Client client;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,13 +26,12 @@ public class Chat extends BaseEntity
 
     @Column(updatable = false)
     protected String uuid;
-
-    public Chat() {}
-
     public Chat(Client client)
     {
         this.client = client;
     }
+
+    public Chat() {}
 
     @PrePersist
     public void onCreate()
