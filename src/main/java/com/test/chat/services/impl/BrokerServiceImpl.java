@@ -4,6 +4,7 @@ import com.test.chat.enums.MessageType;
 import com.test.chat.exceptions.AuthenticationException;
 import com.test.chat.exceptions.BrokerServiceException;
 import com.test.chat.forms.AskForm;
+import com.test.chat.models.dtos.ChatDTO;
 import com.test.chat.models.dtos.MessageDTO;
 import com.test.chat.models.entities.Admin;
 import com.test.chat.models.entities.Chat;
@@ -15,9 +16,13 @@ import com.test.chat.services.ClientService;
 import com.test.chat.services.MessageService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.mapping.Collection;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +31,7 @@ public class BrokerServiceImpl implements BrokerService {
     protected final ChatService chatService;
     protected final MessageService messageService;
     protected final AdminServiceImpl adminService;
+    protected final ModelMapper modelMapper;
 
     @Override
     public void sendAsk(@NonNull final AskForm askForm)
@@ -46,35 +52,40 @@ public class BrokerServiceImpl implements BrokerService {
     }
 
     @Override
-    public List<Chat> getFreeChats()
+    public List<ChatDTO> getFreeChats()
     {
-        return chatService.getFreeChats();
+        return chatService.getFreeChats().stream()
+                .map(chat -> modelMapper.map(chat, ChatDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Chat> getAdminChats(@NonNull final String adminEmail)
+    public List<ChatDTO> getAdminChats(@NonNull final String adminEmail)
     {
-        return chatService.getChatByAdminEmail(adminEmail);
+        return chatService.getChatByAdminEmail(adminEmail).stream()
+                .map(chat -> modelMapper.map(chat, ChatDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Chat getCurrentChat(@NonNull final String chatUUIT, @NonNull final String adminEmail) throws AuthenticationException, BrokerServiceException {
+    public ChatDTO getCurrentChat(@NonNull final String chatUUIT, @NonNull final String adminEmail) throws AuthenticationException, BrokerServiceException {
         Admin admin = adminService.getUserByEmail(adminEmail);
         Chat chat = chatService.getChatByUUID(chatUUIT);
 
         if(chat.getAdmin().equals(admin) || chat.getAdmin() == null)
-            return chat;
+            return modelMapper.map(chat, ChatDTO.class);
 
         throw new BrokerServiceException(BrokerServiceException.CAN_NOT_READ);
     }
 
     @Override
-    public Message sendAnswer(@NonNull final MessageDTO messageDTO, @NonNull final String adminEmail) throws AuthenticationException, BrokerServiceException {
+    public MessageDTO sendAnswer(@NonNull final MessageDTO messageDTO, @NonNull final String adminEmail) throws AuthenticationException, BrokerServiceException {
         Admin admin = adminService.getUserByEmail(adminEmail);
         Chat chat = chatService.getChatByUUID(messageDTO.getChatUUID());
 
         if(chat.getAdmin().equals(admin))
-            return messageService.sendMessage(chat, messageDTO.getMessage(), MessageType.ANSWER);
+            return modelMapper.map(messageService.sendMessage(chat, messageDTO.getMessage(), MessageType.ANSWER),
+                    MessageDTO.class);
 
         throw new BrokerServiceException(BrokerServiceException.CAN_NOT_WRITE);
     }
