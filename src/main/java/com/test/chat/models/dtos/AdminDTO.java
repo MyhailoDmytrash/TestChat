@@ -2,12 +2,12 @@ package com.test.chat.models.dtos;
 
 import com.test.chat.models.entities.Authority;
 import com.test.chat.models.entities.Chat;
+import com.test.chat.transfers.AdminDTOTransfer;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -15,21 +15,21 @@ public class AdminDTO
 {
     protected Authority authority;
 
-    @OneToMany(cascade = CascadeType.ALL)
     protected List<Chat> chat;
 
-    @Email
+    @NotNull(groups = AdminDTOTransfer.Login.class)
+    @Email(groups = AdminDTOTransfer.Login.class)
     protected String email;
 
-    @NotBlank
+    @NotBlank(groups = AdminDTOTransfer.Registration.class)
     protected String name;
 
-    @NotBlank
+    @NotBlank(groups = AdminDTOTransfer.Registration.class)
     protected String surname;
 
-    @NotBlank
+    @NotBlank(groups = AdminDTOTransfer.Login.class)
     protected String password;
 
-    @NotBlank
+    @NotBlank(groups = AdminDTOTransfer.Registration.class)
     protected String repeatPassword;
 }

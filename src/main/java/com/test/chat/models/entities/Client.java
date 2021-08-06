@@ -1,7 +1,5 @@
 package com.test.chat.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.test.chat.View;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,7 +11,6 @@ public class Client extends BaseEntity
     @Column(unique = true)
     protected String login;
 
-    @JsonView(View.OnlyChats.class)
     protected String username;
 
 

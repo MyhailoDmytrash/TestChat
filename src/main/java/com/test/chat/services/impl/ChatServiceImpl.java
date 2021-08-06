@@ -4,7 +4,7 @@ import com.test.chat.models.entities.Admin;
 import com.test.chat.models.entities.Chat;
 import com.test.chat.models.entities.Client;
 import com.test.chat.repositories.ChatRepository;
-import com.test.chat.exceptions.MessageManagerException;
+import com.test.chat.exceptions.BrokerServiceException;
 import com.test.chat.services.ChatService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +30,9 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public Chat getChatByUUID(@NonNull final String chatUUID) throws MessageManagerException {
+    public Chat getChatByUUID(@NonNull final String chatUUID) throws BrokerServiceException {
         return chatRepository.getChatByUuid(chatUUID)
-                .orElseThrow(() -> new MessageManagerException("Chat not found"));
+                .orElseThrow(() -> new BrokerServiceException("Chat not found"));
     }
 
     @Override

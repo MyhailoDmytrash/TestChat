@@ -1,31 +1,27 @@
 package com.test.chat.controllers;
 
 import com.test.chat.exceptions.AuthenticationException;
-import com.test.chat.exceptions.MessageManagerException;
-import com.test.chat.forms.AnswerForm;
+import com.test.chat.exceptions.BrokerServiceException;
 import com.test.chat.forms.AskForm;
-import com.test.chat.forms.SpecificationChatForm;
-import com.test.chat.models.entities.Chat;
-import com.test.chat.models.entities.Message;
+import com.test.chat.models.dtos.ChatDTO;
+import com.test.chat.models.dtos.MessageDTO;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.Valid;
 import java.util.List;
 
 public interface MessageController {
-    void postAsk(@Valid @RequestBody AskForm askForm);
+    void postAsk(AskForm askForm);
 
-    List<Chat> getChats();
+    List<ChatDTO> getChats();
 
-    void postCatchChat(@Valid @RequestBody SpecificationChatForm specificationChatForm,
-                       Authentication authentication) throws AuthenticationException, MessageManagerException;
+    void postCatchChat(ChatDTO specificationChatForm,
+                       Authentication authentication) throws AuthenticationException, BrokerServiceException;
 
-    List<Chat> getMyChats(@Valid Authentication authentication);
+    List<ChatDTO> getMyChats(Authentication authentication);
 
-    Chat getCurrentChat(@Valid @RequestBody SpecificationChatForm specificationChatForm,
-                        Authentication authentication) throws AuthenticationException, MessageManagerException;
+    ChatDTO getCurrentChat(ChatDTO specificationChatForm,
+                        Authentication authentication) throws AuthenticationException, BrokerServiceException;
 
-    Message postAnswer(@Valid @RequestBody AnswerForm answerForm,
-                       Authentication authentication) throws AuthenticationException, MessageManagerException;
+    MessageDTO postAnswer(MessageDTO messageDTO,
+                       Authentication authentication) throws AuthenticationException, BrokerServiceException;
 }

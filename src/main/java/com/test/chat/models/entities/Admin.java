@@ -1,6 +1,5 @@
 package com.test.chat.models.entities;
 
-import com.test.chat.forms.RegistrationForm;
 import com.test.chat.models.dtos.AdminDTO;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

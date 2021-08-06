@@ -1,7 +1,6 @@
 package com.test.chat.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.test.chat.View;
 import lombok.Data;
 import lombok.ToString;
 
@@ -13,11 +12,9 @@ import java.util.List;
 @ToString(of = {"messages"})
 public class Chat extends BaseEntity
 {
-    @JsonView(View.CurrentChat.class)
     @OneToMany(mappedBy = "chat", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     protected List<Message> messages;
 
-    @JsonView(View.OnlyChats.class)
     @OneToOne(mappedBy = "chat", fetch = FetchType.LAZY)
     protected Client client;
 
@@ -25,7 +22,6 @@ public class Chat extends BaseEntity
     @JoinColumn(name = "admin_id")
     protected Admin admin;
 
-    @JsonView(View.OnlyChats.class)
     @Column(updatable = false)
     protected String uuid;
 

@@ -1,9 +1,10 @@
 package com.test.chat.services.impl;
 
+import com.test.chat.enums.MessageType;
 import com.test.chat.exceptions.AuthenticationException;
-import com.test.chat.exceptions.MessageManagerException;
-import com.test.chat.forms.AnswerForm;
+import com.test.chat.exceptions.BrokerServiceException;
 import com.test.chat.forms.AskForm;
+import com.test.chat.models.dtos.MessageDTO;
 import com.test.chat.models.entities.Admin;
 import com.test.chat.models.entities.Chat;
 import com.test.chat.models.entities.Client;
@@ -30,16 +31,16 @@ public class BrokerServiceImpl implements BrokerService {
     public void sendAsk(@NonNull final AskForm askForm)
     {
         Client client = clientService.getClientByLoginAndUsername(askForm.getLogin(), askForm.getUsername());
-        messageService.sendMessage(client.getChat(), askForm.getMessage(), Message.MessageType.ASK);
+        messageService.sendMessage(client.getChat(), askForm.getMessage(), MessageType.ASK);
     }
 
     @Override
-    public void catchChat(@NonNull final String adminEmail, @NonNull final String chatUUID) throws MessageManagerException, AuthenticationException {
+    public void catchChat(@NonNull final String adminEmail, @NonNull final String chatUUID) throws BrokerServiceException, AuthenticationException {
 
         Chat chat = chatService.getChatByUUID(chatUUID);
 
         if(chat.getAdmin() != null)
-            throw new MessageManagerException(MessageManagerException.CHAT_HAS_ADMIN);
+            throw new BrokerServiceException(BrokerServiceException.CHAT_HAS_ADMIN);
 
         chatService.setAdmin(chat, adminService.getUserByEmail(adminEmail));
     }
@@ -57,24 +58,24 @@ public class BrokerServiceImpl implements BrokerService {
     }
 
     @Override
-    public Chat getCurrentChat(@NonNull final String chatUUIT, @NonNull final String adminEmail) throws AuthenticationException, MessageManagerException {
+    public Chat getCurrentChat(@NonNull final String chatUUIT, @NonNull final String adminEmail) throws AuthenticationException, BrokerServiceException {
         Admin admin = adminService.getUserByEmail(adminEmail);
         Chat chat = chatService.getChatByUUID(chatUUIT);
 
         if(chat.getAdmin().equals(admin) || chat.getAdmin() == null)
             return chat;
 
-        throw new MessageManagerException(MessageManagerException.CAN_NOT_READ);
+        throw new BrokerServiceException(BrokerServiceException.CAN_NOT_READ);
     }
 
     @Override
-    public Message sendAnswer(@NonNull final AnswerForm answerForm, @NonNull final String adminEmail) throws AuthenticationException, MessageManagerException {
+    public Message sendAnswer(@NonNull final MessageDTO messageDTO, @NonNull final String adminEmail) throws AuthenticationException, BrokerServiceException {
         Admin admin = adminService.getUserByEmail(adminEmail);
-        Chat chat = chatService.getChatByUUID(answerForm.getChatUUID());
+        Chat chat = chatService.getChatByUUID(messageDTO.getChatUUID());
 
         if(chat.getAdmin().equals(admin))
-            return messageService.sendMessage(chat, answerForm.getMessage(), Message.MessageType.ANSWER);
+            return messageService.sendMessage(chat, messageDTO.getMessage(), MessageType.ANSWER);
 
-        throw new MessageManagerException(MessageManagerException.CAN_NOT_WRITE);
+        throw new BrokerServiceException(BrokerServiceException.CAN_NOT_WRITE);
     }
 }
